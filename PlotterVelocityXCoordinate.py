@@ -1,8 +1,8 @@
 
 """
 This program reads a given CSV file in the /csvs/ folder and plots
-velocity on the X and Y coordinate on the Y. This is most useful
-for thr striaght section. 
+velocity on the Y and X coordinate on the X. This is most useful
+for the abrupt sections. 
 
 Input: csv file name ex: aer210.csv
 Output: Plot inlc uncertainties no trendline.
@@ -21,7 +21,7 @@ def plot_velocity_vs_y(csv_file):
     # Initialize lists to store data
     velocities = []
     velocity_errors = []
-    y_coordinates = []
+    x_coordinates = []
 
     # Read data from CSV
     with open(csv_file, mode='r', encoding='utf-8') as file:
@@ -30,7 +30,7 @@ def plot_velocity_vs_y(csv_file):
             try:
                 velocities.append(float(row["Velocity (μm/ms)"]))
                 velocity_errors.append(float(row["Uncertainty (μm/ms)"]))
-                y_coordinates.append(float(row["Avg Y"]))
+                x_coordinates.append(float(row["Avg X"]))
             except KeyError:
                 print("Error: CSV file does not contain the required columns.")
                 return
@@ -41,9 +41,9 @@ def plot_velocity_vs_y(csv_file):
     # Plot the data
     plt.figure(figsize=(8, 6))
     plt.errorbar(
+        x_coordinates,
         velocities,
-        y_coordinates,
-        xerr=velocity_errors,
+        yerr=velocity_errors,
         fmt='o',
         color='blue',
         ecolor='red',
@@ -51,9 +51,9 @@ def plot_velocity_vs_y(csv_file):
         capsize=3,
         label='Data points with error bars'
     )
-    plt.xlabel('Velocity (μm/ms)', fontsize=14)
-    plt.ylabel('Y Coordinate (pixels)', fontsize=14)
-    plt.title('Velocity vs. Y Coordinate', fontsize=16)
+    plt.ylabel('Velocity (μm/ms)', fontsize=14)
+    plt.xlabel('X Coordinate (pixels)', fontsize=14)
+    plt.title('Velocity vs. X Coordinate', fontsize=16)
     plt.legend()
     plt.grid(True)
     plt.tight_layout()

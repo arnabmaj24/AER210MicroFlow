@@ -50,12 +50,14 @@ def click_event(event, x, y, flags, params):
                 # Calculate velocity
                 velocity = length_in_micrometers / frame_time  # μm/ms
                 print(f"Velocity: {velocity:.2f} μm/ms")
-                
+                print(frame_time)
                 # Calculate uncertainty
-                dt = 0.5  # Uncertainty in time (ms)
+                dt = 0.1  # Uncertainty in time (ms)
                 dd = 2    # Uncertainty in distance (μm)
-                delta_v = np.sqrt((dt/frame_time)**2 + 
+                delta_v = velocity*np.sqrt((dt/frame_time)**2 + 
                                   (dd/length_in_micrometers)**2)
+                print(dt/frame_time)
+                print(dd/length_in_micrometers)
                 print(f"Velocity with uncertainty: {velocity:.2f} ± {delta_v:.2f} μm/ms")
 
                 # Calculate average coordinates
@@ -72,12 +74,11 @@ def click_event(event, x, y, flags, params):
                 points.clear()
                 print("Ready for next measurement. Click two new points.")
 
-def line_length_analysis(image_path, scale_bar_length_um, scale_bar_pixel_length, frame_time_ms, csv_file_path):
+def line_length_analysis(image_path, scale_bar_length_um, scale_bar_pixel_length, csv_file_path):
     global image, points, pixel_to_um, frame_time, csv_file
 
     # Calculate scaling factor (μm per pixel)
     pixel_to_um = scale_bar_length_um / scale_bar_pixel_length  # micrometers per pixel
-    frame_time = frame_time_ms / 1000.0  # Convert frame time to seconds
     csv_file = csv_file_path
 
     # Prepare CSV file
@@ -111,8 +112,8 @@ image_name = input("Inpute the image name (ex: aer210.jpg): ")
 image_path = f"images/{image_name}"  # Update with your image path
 scale_bar_length_um = 70.333  # Length of the scale bar in micrometers YOU MIGHT HAVE TO CHANGE THIS
 scale_bar_pixel_length = 344  # Scale bar length in pixels (measure it manually) YOU MIGHT HAVE TO CHANGE THIS
-frame_time_ms = int(input("Input the Exposure Time (ex: 69): "))  # Frame time in milliseconds
+frame_time = int(input("Input the Exposure Time (ex: 69): "))  # Frame time in milliseconds
 csv_file_path = f"csvs/{image_path[6:-4]}.csv"
 
 
-line_length_analysis(image_path, scale_bar_length_um, scale_bar_pixel_length, frame_time_ms, csv_file_path)
+line_length_analysis(image_path, scale_bar_length_um, scale_bar_pixel_length, csv_file_path)
